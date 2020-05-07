@@ -14,8 +14,6 @@ steps:
       from_secret: docker_password
     repo: zillownyc/kustomize
     build_args:
-    - KUSTOMIZE_REPO=https://github.com/kubernetes-sigs/kustomize.git
-    - KUSTOMIZE_COMMIT=3af514f
     - KUSTOMIZE_VERSION=v3.5.4
     targs:
     - latest

@@ -2,7 +2,7 @@
 
 FROM golang:1.14.2
 
-ARG KUSTOMIZE_REPO
+ARG KUSTOMIZE_REPO=https://github.com/kubernetes-sigs/kustomize.git
 ARG KUSTOMIZE_VERSION
 
 RUN git clone ${KUSTOMIZE_REPO} /go/src/sigs.k8s.io/kustomize \
@@ -12,7 +12,6 @@ RUN git clone ${KUSTOMIZE_REPO} /go/src/sigs.k8s.io/kustomize \
 WORKDIR /go/src/sigs.k8s.io/kustomize/kustomize
 
 ENV GO_PKG=sigs.k8s.io/kustomize/api/provenance
-
 RUN go build -o /usr/local/bin/kustomize \
   -ldflags "-s \
     -X ${GO_PKG}.version=${KUSTOMIZE_VERSION} \
