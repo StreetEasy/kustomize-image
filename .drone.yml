@@ -15,7 +15,7 @@ steps:
     repo: zillownyc/kustomize
     build_args:
     - KUSTOMIZE_VERSION=v3.5.4
-    targs:
+    tags:
     - latest
     - "3.5.4"
     - "3.5"
