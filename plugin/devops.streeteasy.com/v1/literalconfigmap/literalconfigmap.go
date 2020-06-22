@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"sigs.k8s.io/kustomize/api/kv"
@@ -36,10 +37,20 @@ func (p *plugin) Config(
 }
 
 func (p *plugin) Generate() (resmap.ResMap, error) {
-	sources := []string{}
-	for _, s := range p.LiteralSources {
-		sources = append(sources, os.ExpandEnv(s))
+	ldr := kv.NewLoader(p.h.Loader(), p.h.Validator())
+
+	all, err := ldr.Load(p.ConfigMapArgs.KvPairSources)
+	if err != nil {
+		return nil, err
 	}
+
+	sources := []string{}
+	for _, pair := range all {
+		sources = append(sources, fmt.Sprintf("%s=%s", pair.Key, os.ExpandEnv(pair.Value)))
+	}
+
+	p.EnvSources = []string{}
+	p.FileSources = []string{}
 	p.LiteralSources = sources
 	return p.h.ResmapFactory().FromConfigMapArgs(
 		kv.NewLoader(p.h.Loader(), p.h.Validator()), &p.GeneratorOptions, p.ConfigMapArgs)
